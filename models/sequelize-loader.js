@@ -1,7 +1,7 @@
 'use strict'
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('express-sample', 'root', null, {
-  host: 'localhost',
+  host: 'db',
   dialect: 'mysql',
 });
 
