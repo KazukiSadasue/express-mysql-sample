@@ -2,4 +2,33 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  div
+  form(action="/create", method="post").form-inline.mb-3
+    div.form-group
+      input(type="text" name="task" placeholder="例: 晩御飯を作る").form-control
+    button(type="submit").btn.btn-primary 追加
+
+  div.mb-3
+    h2 TODO
+    form(name="todoform" method="post").mb-2
+      ul.list-group
+      each todo in todos
+        li.list-group-item.px-5
+          input(name="todos", value=todo.id, type="checkbox", id=`todo-${todo.id}`).form-check-input
+          label(for=`todo-${todo.id}`).form-check-label #{todo.task}
+    button.btn.btn-success(onclick="done()").mr-2 達成
+    button.btn.btn-danger(onclick="deleteTodo()") 削除
+
+  div
+    h2 DONE
+    form(name="doneform" method="post").mb-2
+      ul.list-group
+        li.list-group-item.px-5
+          input(name="todos", value=`1`, type="checkbox", id=`todo-1`).form-check-input
+          label(for=`todo-1`).form-check-label 晩御飯作成
+        li.list-group-item.px-5
+          input(name="todos", value=`2`, type="checkbox", id=`todo-2`).form-check-input
+          label(for=`todo-2`).form-check-label 朝御飯作成
+    button.btn.btn-danger(onclick="deleteTodo()") 削除
+
+  script(src="javascripts/todo.js")

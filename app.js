@@ -5,6 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var helmet = require('helmet');
 
+// モデルの読み込み
+var Todo = require('./models/todo');
+Todo.sync();
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
