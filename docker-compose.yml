@@ -20,3 +20,6 @@ services:
       MYSQL_DATABASE: express-sample
     ports:
       - 3306:3306
+    volumes:
+      - ./mysql/conf:/etc/mysql/conf.d/:ro
+      - ./mysql/data:/var/lib/mysql
