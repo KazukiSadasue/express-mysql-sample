@@ -6,9 +6,11 @@ const { Op } = require('sequelize');
 // TODOトップページ
 router.get('/', async (req, res, next) => {
   const todos = await Todo.findAll();
+  const todoTasks = todos.filter(todo => todo.isDone === false);
+  const doneTasks = todos.filter(todo => todo.isDone === true);
+
   res.render('index', {
-    title: 'TODOアプリ',
-    todos,
+    todoTasks, doneTasks,
   });
 });
 
@@ -21,27 +23,37 @@ router.post('/create', async (req, res, next) => {
 });
 
 // TODO完了
-router.post('/done', (req, res, next) => {
+router.post('/done', async (req, res, next) => {
+  const todoModels = await getModelsByIds(req.body.todos);
+  for(const todo of todoModels) {
+    await todo.update({
+      isDone: true
+    });
+  }
   res.redirect('/');
 });
 
 // TODO削除
 router.post('/delete', async (req, res, next) => {
-  let todos = req.body.todos;
-  if (typeof todos === 'string') {
-    todos = todos.split();
-  }
-  const todoModels = await Todo.findAll({
-    where: {
-      id: {
-        [Op.in]: todos,
-      }
-    }
-  });
+  const todoModels = await getModelsByIds(req.body.todos);
   for(const todo of todoModels) {
     await todo.destroy();
   }
   res.redirect('/');
 });
+
+// リクエストのIDからTODOモデルを取得する
+async function getModelsByIds(ids) {
+  if (typeof ids === 'string') {
+    ids = ids.split();
+  }
+  return await Todo.findAll({
+    where: {
+      id: {
+        [Op.in]: ids,
+      }
+    }
+  });
+}
 
 module.exports = router;

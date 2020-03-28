@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  h1= title
+  h1 TODOアプリ
   div
   form(action="/create", method="post").form-inline.mb-3
     div.form-group
@@ -12,23 +12,28 @@ block content
     h2 TODO
     form(name="todoform" method="post").mb-2
       ul.list-group
-      each todo in todos
+      each todo in todoTasks
         li.list-group-item.px-5
           input(name="todos", value=todo.id, type="checkbox", id=`todo-${todo.id}`).form-check-input
           label(for=`todo-${todo.id}`).form-check-label #{todo.task}
-    button.btn.btn-success(onclick="done()").mr-2 達成
-    button.btn.btn-danger(onclick="deleteTodo()") 削除
+    if todoTasks.length
+      button.btn.btn-success(onclick="done()").mr-2 達成
+      button.btn.btn-danger(onclick="deleteTodo()") 削除
+    else
+      div TODOタスクはありません
+
 
   div
     h2 DONE
     form(name="doneform" method="post").mb-2
       ul.list-group
+      each done in doneTasks
         li.list-group-item.px-5
-          input(name="todos", value=`1`, type="checkbox", id=`todo-1`).form-check-input
-          label(for=`todo-1`).form-check-label 晩御飯作成
-        li.list-group-item.px-5
-          input(name="todos", value=`2`, type="checkbox", id=`todo-2`).form-check-input
-          label(for=`todo-2`).form-check-label 朝御飯作成
-    button.btn.btn-danger(onclick="deleteTodo()") 削除
+          input(name="todos", value=done.id, type="checkbox", id=`todo-${done.id}`).form-check-input
+          label(for=`todo-${done.id}`).form-check-label #{done.task}
+    if doneTasks.length
+      button.btn.btn-danger(onclick="deleteDone()") 削除
+    else
+      div DONEタスクはありません
 
   script(src="javascripts/todo.js")
